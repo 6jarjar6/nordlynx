@@ -3,6 +3,6 @@
   "extends": [
     "config:best-practices"
   ],
-  "includeForks" : true,
+  "forkProcessing": "enabled",
   "automerge": true
 }
