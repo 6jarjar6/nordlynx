@@ -1,20 +1,23 @@
-Currently trying to continue to maintain
+<p align="center">
+WORK IN PROGRESS
+</p>
 
 <p align="center">
     <a href="https://github.com/bubuntux/nordlynx">bubuntux/nordlynx</a>
     <br>
     <a href="https://github.com/bubuntux/nordlynx/blob/master/LICENSE"><img src="https://badgen.net/github/license/bubuntux/nordlynx?color=cyan"/></a>
-    <a href="https://cloud.docker.com/u/bubuntux/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/size/bubuntux/nordlynx?icon=docker&label=size"/></a>
-    <a href="https://cloud.docker.com/u/bubuntux/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/pulls/bubuntux/nordlynx?icon=docker&label=pulls"/></a>
-    <a href="https://cloud.docker.com/u/bubuntux/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/stars/bubuntux/nordlynx?icon=docker&label=stars"/></a>
-    <a href="https://github.com/bubuntux/nordlynx/network/members"><img src="https://badgen.net/github/forks/bubuntux/nordlynx?icon=github&label=forks&color=black"/></a>
-    <a href="https://github.com/bubuntux/nordlynx/stargazers"><img src="https://badgen.net/github/stars/bubuntux/nordlynx?icon=github&label=stars&color=black"/></a>
+    <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/6jarjar6/nordlynx"><img src="https://badgen.net/docker/size/6jarjar6/nordlynx?icon=docker&label=size"/></a>
+    <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/pulls/6jarjar6/nordlynx?icon=docker&label=pulls"/></a>
+    <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/stars/6jarjar6/nordlynx?icon=docker&label=stars"/></a>
+    <a href="https://github.com/6jarjar6/nordlynx/network/members"><img src="https://badgen.net/github/forks/6jarjar6/nordlynx?icon=github&label=forks&color=black"/></a>
+    <a href="https://github.com/6jarjar6/nordlynx/stargazers"><img src="https://badgen.net/github/stars/bubuntux/nordlynx?icon=github&label=stars&color=black"/></a>
 </p>
 
 ## Quick reference
 
-- **Maintained by**: [Julio Gutierrez](https://github.com/bubuntux)
-- **Where to get help**: [Github discussions](https://github.com/bubuntux/nordlynx/discussions)
+- **Forked from **: [Julio Gutierrez](https://github.com/bubuntux)
+- **Maintained by **: [6jarjar6](https://github.com/6jarjar6)
+- **Where to get help**: [Github discussions](https://github.com/6jarjar6/nordlynx/discussions)
 
 ## Supported tags
 
