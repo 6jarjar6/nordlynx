@@ -10,7 +10,7 @@ WORK IN PROGRESS
     <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/pulls/6jarjar6/nordlynx?icon=docker&label=pulls"/></a>
     <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/stars/6jarjar6/nordlynx?icon=docker&label=stars"/></a>
     <a href="https://github.com/6jarjar6/nordlynx/network/members"><img src="https://badgen.net/github/forks/6jarjar6/nordlynx?icon=github&label=forks&color=black"/></a>
-    <a href="https://github.com/6jarjar6/nordlynx/stargazers"><img src="https://badgen.net/github/stars/bubuntux/nordlynx?icon=github&label=stars&color=black"/></a>
+    <a href="https://github.com/6jarjar6/nordlynx/stargazers"><img src="https://badgen.net/github/stars/6jarjar6/nordlynx?icon=github&label=stars&color=black"/></a>
 </p>
 
 ## Quick reference
@@ -27,11 +27,11 @@ WORK IN PROGRESS
 
 ## Quick reference (cont.)
 
-- **Where to file issues**: [Github issues](https://github.com/bubuntux/nordlynx/issues)
-- **Supported architecture**: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64)) amd64, arm32v7, arm64
-- **Published image artifact details**: [DockerHub](https://hub.docker.com/r/bubuntux/nordlynx), [Github packages](https://github.com/bubuntux/nordlynx/pkgs/container/nordlynx)
-- **Continuous integration**: [Github actions](https://github.com/bubuntux/nordlynx/actions/workflows/docker-image-ci.yml)
-- **Source**: [Github](https://github.com/bubuntux/nordlynx)
+- **Where to file issues**: [Github issues](https://github.com/6jarjar6/nordlynx/issues)
+- **Supported architecture**: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64)) amd64, arm64
+- **Published image artifact details**: [DockerHub](https://hub.docker.com/r/6jarjar6/nordlynx), [Github packages](https://github.com/6jarjar6/nordlynx/pkgs/container/nordlynx)
+- **Continuous integration**: [Github actions](https://github.com/6jarjar6/nordlynx/actions/workflows/docker-image-ci.yml)
+- **Source**: [Github](https://github.com/6jarjar6/nordlynx)
 
 ## What is NordLynx?
 
