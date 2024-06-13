@@ -1,3 +1,5 @@
+Currently trying to continue to maintain
+
 <p align="center">
     <a href="https://github.com/bubuntux/nordlynx">bubuntux/nordlynx</a>
     <br>
