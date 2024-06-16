@@ -5,10 +5,10 @@ WORK IN PROGRESS
 <p align="center">
     <a href="https://github.com/bubuntux/nordlynx">bubuntux/nordlynx</a>
     <br>
-    <a href="https://github.com/bubuntux/nordlynx/blob/master/LICENSE"><img src="https://badgen.net/github/license/bubuntux/nordlynx?color=cyan"/></a>
+    <a href="https://github.com/6jzrjar6/nordlynx/blob/master/LICENSE"><img src="https://badgen.net/github/license/6jarjar6/nordlynx?color=cyan"/></a>
     <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/6jarjar6/nordlynx"><img src="https://badgen.net/docker/size/6jarjar6/nordlynx?icon=docker&label=size"/></a>
-    <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/pulls/6jarjar6/nordlynx?icon=docker&label=pulls"/></a>
-    <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/bubuntux/nordlynx"><img src="https://badgen.net/docker/stars/6jarjar6/nordlynx?icon=docker&label=stars"/></a>
+    <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/6jarjar6/nordlynx"><img src="https://badgen.net/docker/pulls/6jarjar6/nordlynx?icon=docker&label=pulls"/></a>
+    <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/6jarjar6/nordlynx"><img src="https://badgen.net/docker/stars/6jarjar6/nordlynx?icon=docker&label=stars"/></a>
     <a href="https://github.com/6jarjar6/nordlynx/network/members"><img src="https://badgen.net/github/forks/6jarjar6/nordlynx?icon=github&label=forks&color=black"/></a>
     <a href="https://github.com/6jarjar6/nordlynx/stargazers"><img src="https://badgen.net/github/stars/6jarjar6/nordlynx?icon=github&label=stars&color=black"/></a>
 </p>
@@ -99,7 +99,7 @@ secrets:
 docker run -d \
   --cap-add=NET_ADMIN #required \
   -e PRIVATE_KEY=xxxxxxxxx #required \
-  ghcr.io/bubuntux/nordlynx
+  ghcr.io/6jarjar6/nordlynx
 ```
 
 Review the [wiki](https://github.com/bubuntux/nordlynx/wiki) for more practical usages and host specific instructions.
@@ -145,20 +145,20 @@ To get your `PRIVATE_KEY` you will need to get an access token from the NordVPN 
 7. From your computer where Docker is installed, run the below command and replace `{{{TOKEN}}}` with what you copied from step 6 above:
 
     ```
-    docker run --rm --cap-add=NET_ADMIN -e TOKEN={{{TOKEN}}} ghcr.io/bubuntux/nordvpn:get_private_key
+    docker run --rm --cap-add=NET_ADMIN -e TOKEN={{{TOKEN}}} ghcr.io/6jarjar6/nordvpn:get_private_key
     ```
 
 8. Docker will do it's thing and spit  out your `PRIVATE_KEY`:
 
     ```
-    user@hostname:~/docker> docker run --rm --cap-add=NET_ADMIN -e TOKEN=[redacted] ghcr.io/bubuntux/nordvpn:get_private_key
-    Unable to find image 'ghcr.io/bubuntux/nordvpn:get_private_key' locally
-    get_private_key: Pulling from bubuntux/nordvpn
+    user@hostname:~/docker> docker run --rm --cap-add=NET_ADMIN -e TOKEN=[redacted] ghcr.io/6jarjar6/nordvpn:get_private_key
+    Unable to find image 'ghcr.io/6jarjar6/nordvpn:get_private_key' locally
+    get_private_key: Pulling from 6jarjar6/nordvpn
     06d39c85623a: Pull complete 
     3e1c241a05c8: Pull complete 
     0077b26e8dce: Pull complete 
     Digest: sha256:0d91aabb4511d400b01e930654950729a4e859d3c250f61664662b0ed7027c56
-    Status: Downloaded newer image for ghcr.io/bubuntux/nordvpn:get_private_key
+    Status: Downloaded newer image for ghcr.io/6jarjar6/nordvpn:get_private_key
     Waiting for daemon to start up...
     A new version of NordVPN is available! Please update the application.
     Welcome to NordVPN! You can now connect to VPN by using 'nordvpn connect'.
@@ -192,7 +192,7 @@ This example will start a nordlynx VPN container on a `legacy_p2p` VPN server.
 ``` yaml
 services:
     nordlynx:
-        image: ghcr.io/bubuntux/nordlynx
+        image: ghcr.io/6jarjar6/nordlynx
         hostname: nordlynx
         container_name: nordlynx
         cap_add:
@@ -222,7 +222,7 @@ Additionally, you need to ensure the second container starts **AFTER** the nordl
 ``` yaml
 services:
     nordlynx:
-        image: ghcr.io/bubuntux/nordlynx
+        image: ghcr.io/6jarjar6/nordlynx
         hostname: nordlynx
         container_name: nordlynx
         ports:
