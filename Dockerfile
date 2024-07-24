@@ -8,3 +8,6 @@ RUN apk add --no-cache -U bash wireguard-tools curl jq patch iptables ip6tables 
 	patch --verbose -d / -p 0 -i /patch/wg-quick.patch && \
     apk del --purge patch && \
 	rm -rf /tmp/* /patch
+ 
+# Set Bash as the default shell
+SHELL ["/bin/bash", "-c"]
