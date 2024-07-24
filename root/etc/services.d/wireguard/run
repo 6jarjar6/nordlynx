@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/usr/bin/with-contenv sh
 
 if [[ -z ${PUBLIC_KEY} || -z ${END_POINT} ]]; then
   echo "[$(date -Iseconds)] Finding the best server..."
