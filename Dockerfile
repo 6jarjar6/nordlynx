@@ -4,10 +4,14 @@ LABEL maintainer="6jarjar6"
 HEALTHCHECK CMD [ $(( $(date -u +%s) - $(wg show wg0 latest-handshakes | awk '{print $2}') )) -le 120 ] || exit 1
 
 COPY /root /
-RUN apk add --no-cache -U bash wireguard-tools curl jq patch iptables ip6tables && \
+
+# Install bash
+RUN apk add --no-cache -U bash
+
+# Set Bash as the default shell
+SHELL ["/bin/bash", "-c"]
+
+RUN apk add --no-cache -U wireguard-tools curl jq patch iptables ip6tables && \
 	patch --verbose -d / -p 0 -i /patch/wg-quick.patch && \
     apk del --purge patch && \
 	rm -rf /tmp/* /patch
- 
-# Set Bash as the default shell
-SHELL ["/bin/bash", "-c"]
