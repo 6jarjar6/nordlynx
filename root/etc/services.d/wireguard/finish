@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "[$(date -Iseconds)] Connection summary:"
 wg show wg0
