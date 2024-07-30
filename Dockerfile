@@ -11,10 +11,8 @@ RUN apk add --no-cache -U bash
 # Set Bash as the default shell
 SHELL ["/bin/bash", "-c"]
 
-# Ensure scripts in /etc/cont-init.d/ and /etc/services.d/wireguard have the correct permissions
-RUN chmod +x /etc/cont-init.d/* && chmod +x /etc/services.d/wireguard/*
-
-RUN apk add --no-cache -U wireguard-tools curl jq patch iptables ip6tables && \
-	patch --verbose -d / -p 0 -i /patch/wg-quick.patch && \
+RUN chmod +x /etc/cont-init.d/* /etc/services.d/wireguard/* && \
+    apk add --no-cache -U wireguard-tools curl jq patch iptables ip6tables && \
+    patch --verbose -d / -p 0 -i /patch/wg-quick.patch && \
     apk del --purge patch && \
-	rm -rf /tmp/* /patch
+    rm -rf /tmp/* /patch
