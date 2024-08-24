@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 iptables-nft -P OUTPUT DROP
 iptables-nft -P INPUT DROP
