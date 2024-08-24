@@ -4,7 +4,11 @@ on:
   schedule:
     - cron: '4 20 1 * 4'
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
+      - 'feature/*'
+      - 'release/*'
 
 jobs:
   build:
@@ -26,8 +30,9 @@ jobs:
       - name: Get Tags
         id: meta
         run: |
-          tags="ghcr.io/${{ github.repository }}:edge,${{ github.repository }}:edge"
-          if [[ $(date '+%d') == 01 || "${{ github.event_name }}" == "push" ]]; then
+          branch=$(echo "${GITHUB_REF#refs/heads/}" | tr '/' '-')
+          tags="ghcr.io/${{ github.repository }}:${branch},${{ github.repository }}:${branch}"
+          if [[ $(date '+%d') == 01 || "${{ github.event_name }}" == "push" && "$branch" == "main" ]]; then
             tags="${tags},ghcr.io/${{ github.repository }}:latest,${{ github.repository }}:latest,\
                   ghcr.io/${{ github.repository }}:$(date '+%Y-%m-%d'),${{ github.repository }}:$(date '+%Y-%m-%d')"
           fi
