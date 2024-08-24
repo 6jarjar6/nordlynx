@@ -12,7 +12,7 @@ RUN apk add --no-cache -U bash
 SHELL ["/bin/bash", "-c"]
 
 RUN chmod +x /etc/cont-init.d/* /etc/services.d/wireguard/* && \
-    apk add --no-cache -U wireguard-tools curl jq patch nftables && \
+    apk add --no-cache -U wireguard-tools curl jq patch iptables && \
     patch --verbose -d / -p 0 -i /patch/wg-quick.patch && \
     apk del --purge patch && \
     rm -rf /tmp/* /patch
