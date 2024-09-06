@@ -145,15 +145,15 @@ To get your `PRIVATE_KEY` you will need to get an access token from the NordVPN 
 7. From your computer where Docker is installed, run the below command and replace `{{{TOKEN}}}` with what you copied from step 6 above:
 
     ```
-    docker run --rm --cap-add=NET_ADMIN -e TOKEN={{{TOKEN}}} ghcr.io/6jarjar6/nordvpn:get_private_key
+    docker run --rm --cap-add=NET_ADMIN -e TOKEN={{{TOKEN}}} ghcr.io/bubuntux/nordvpn:get_private_key
     ```
 
 8. Docker will do it's thing and spit  out your `PRIVATE_KEY`:
 
     ```
-    user@hostname:~/docker> docker run --rm --cap-add=NET_ADMIN -e TOKEN=[redacted] ghcr.io/6jarjar6/nordvpn:get_private_key
-    Unable to find image 'ghcr.io/6jarjar6/nordvpn:get_private_key' locally
-    get_private_key: Pulling from 6jarjar6/nordvpn
+    user@hostname:~/docker> docker run --rm --cap-add=NET_ADMIN -e TOKEN=[redacted] ghcr.io/bubuntux/nordvpn:get_private_key
+    Unable to find image 'ghcr.io/bubuntux/nordvpn:get_private_key' locally
+    get_private_key: Pulling from bubuntux/nordvpn
     06d39c85623a: Pull complete 
     3e1c241a05c8: Pull complete 
     0077b26e8dce: Pull complete 
