@@ -1,8 +1,4 @@
 <p align="center">
-WORK IN PROGRESS
-</p>
-
-<p align="center">
     <a href="https://github.com/bubuntux/nordlynx">bubuntux/nordlynx</a>
     <br>
     <a href="https://github.com/6jzrjar6/nordlynx/blob/master/LICENSE"><img src="https://badgen.net/github/license/6jarjar6/nordlynx?color=cyan"/></a>
