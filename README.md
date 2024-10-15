@@ -1,6 +1,4 @@
 <p align="center">
-    <a href="https://github.com/bubuntux/nordlynx">bubuntux/nordlynx</a>
-    <br>
     <a href="https://github.com/6jzrjar6/nordlynx/blob/master/LICENSE"><img src="https://badgen.net/github/license/6jarjar6/nordlynx?color=cyan"/></a>
     <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/6jarjar6/nordlynx"><img src="https://badgen.net/docker/size/6jarjar6/nordlynx?icon=docker&label=size"/></a>
     <a href="https://cloud.docker.com/u/6jarjar6/repository/docker/6jarjar6/nordlynx"><img src="https://badgen.net/docker/pulls/6jarjar6/nordlynx?icon=docker&label=pulls"/></a>
