@@ -15,7 +15,6 @@
 
 ## Supported tags
 
-- edge (updated weekly)
 - latest (updated monthly)
 - YYYY-mm-dd (created monthly)
 
@@ -62,7 +61,7 @@ Here are some example snippets to help you get started creating a container.
 version: "3"
 services:
   nordlynx:
-    image: ghcr.io/bubuntux/nordlynx
+    image: ghcr.io/6jarjar6/nordlynx
     cap_add:
       - NET_ADMIN #required
     environment:
@@ -75,7 +74,7 @@ services:
 version: "3.9"
 services:
   nordlynx:
-    image: ghcr.io/bubuntux/nordlynx
+    image: ghcr.io/6jarjar6/nordlynx
     cap_add:
       - NET_ADMIN #required
     environment:
@@ -96,7 +95,7 @@ docker run -d \
   ghcr.io/6jarjar6/nordlynx
 ```
 
-Review the [wiki](https://github.com/bubuntux/nordlynx/wiki) for more practical usages and host specific instructions.
+Review the [wiki](https://github.com/6jarjar6/nordlynx/wiki) for more practical usages and host specific instructions.
 
 ## Module
 
