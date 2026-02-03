@@ -9,6 +9,8 @@ on:
       - develop
       - 'feature/*'
       - 'release/*'
+      - 'renovate/*'
+
 
 jobs:
   build:
