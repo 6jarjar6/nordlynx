@@ -21,7 +21,7 @@
 ## Quick reference (cont.)
 
 - **Where to file issues**: [Github issues](https://github.com/6jarjar6/nordlynx/issues)
-- **Supported architecture**: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64)) amd64, arm64
+- **Supported architecture**: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64)) amd64, arm64, riscv64
 - **Published image artifact details**: [DockerHub](https://hub.docker.com/r/6jarjar6/nordlynx), [Github packages](https://github.com/6jarjar6/nordlynx/pkgs/container/nordlynx)
 - **Continuous integration**: [Github actions](https://github.com/6jarjar6/nordlynx/actions/workflows/docker-image-ci.yml)
 - **Source**: [Github](https://github.com/6jarjar6/nordlynx)
