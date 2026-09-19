@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-alpine:3.22@sha256:3609dad66fbc871a0e82ab9dda4bde875b82439b700d39ed2b07489d7c5e35a8
+FROM ghcr.io/linuxserver/baseimage-alpine:3.24@sha256:e4772029b98af17b6670341d07cbd54138a3dc7f6323af1ef76bbc02fd0a813d
 LABEL maintainer="6jarjar6"
 
 HEALTHCHECK CMD [ $(( $(date -u +%s) - $(wg show wg0 latest-handshakes | awk '{print $2}') )) -le 120 ] || exit 1
