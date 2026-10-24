@@ -60,18 +60,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64 #,linux/riscv64
 
-      - name: Download Trivy vulnerability database
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          command: download
-          vuln-type: os
-          format: json
-          output: trivy-download-report.json
-
       - name: Run Trivy vulnerability scanner
         id: trivy-scan
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          scan-type: image
           image-ref: '${{ steps.meta.outputs.image_ref }}'
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
