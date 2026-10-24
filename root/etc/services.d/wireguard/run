@@ -39,7 +39,6 @@ fi
 PrivateKey = ${PRIVATE_KEY}
 ListenPort = ${LISTEN_PORT:-51820}
 Address = ${ADDRESS:-10.5.0.2/32}
-DNS = ${DNS:-103.86.96.100,103.86.99.100}
 Table = ${TABLE}
 PreUp = ${PRE_UP}
 PostUp = ${POST_UP}
@@ -55,7 +54,19 @@ EOF
 } && sync )
 
 echo "[$(date -Iseconds)] Connecting..."
-wg-quick up wg0 
+wg-quick up wg0
+
+# Configure DNS directly. wg-quick's built-in resolvconf hook is incompatible
+# with Docker-managed /etc/resolv.conf (signature mismatch on newer alpine
+# resolvconf), and under set -e it aborts the bring-up and tears the
+# interface down.
+dns=${DNS:-103.86.96.100,103.86.99.100}
+{
+  echo "# Managed by nordlynx"
+  tr ',' '\n' <<< "${dns}" | sed 's/^/nameserver /'
+} > /etc/resolv.conf
+echo "[$(date -Iseconds)] DNS configured: ${dns//,/ }"
+
 echo "[$(date -Iseconds)] Connected! \(ᵔᵕᵔ)/"
 
 if [[ -n ${RECONNECT} ]]; then
