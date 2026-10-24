@@ -34,24 +34,26 @@ fi
 
 [[ -z "${PRIVATE_KEY}" ]] && [[ -f "${PRIVATE_KEY_FILE}" ]] && PRIVATE_KEY="$(head -n 1 "${PRIVATE_KEY_FILE}")"
 
-( umask 077 && { cat >/etc/wireguard/wg0.conf <<-EOF
-[Interface]
-PrivateKey = ${PRIVATE_KEY}
-ListenPort = ${LISTEN_PORT:-51820}
-Address = ${ADDRESS:-10.5.0.2/32}
-Table = ${TABLE}
-PreUp = ${PRE_UP}
-PostUp = ${POST_UP}
-PreDown = ${PRE_DOWN}
-PostDown = ${POST_DOWN}
-
-[Peer]
-Endpoint = ${END_POINT}
-PublicKey = ${PUBLIC_KEY}
-AllowedIPs = ${ALLOWED_IPS:-0.0.0.0/0}
-PersistentKeepalive = ${PERSISTENT_KEEP_ALIVE:-25}
-EOF
-} && sync )
+( umask 077 && {
+  {
+    echo "[Interface]"
+    echo "PrivateKey = ${PRIVATE_KEY}"
+    echo "ListenPort = ${LISTEN_PORT:-51820}"
+    echo "Address = ${ADDRESS:-10.5.0.2/32}"
+    if [[ -n ${TABLE} ]]; then echo "Table = ${TABLE}"; fi
+    if [[ -n ${PRE_UP} ]]; then echo "PreUp = ${PRE_UP}"; fi
+    if [[ -n ${POST_UP} ]]; then echo "PostUp = ${POST_UP}"; fi
+    if [[ -n ${PRE_DOWN} ]]; then echo "PreDown = ${PRE_DOWN}"; fi
+    if [[ -n ${POST_DOWN} ]]; then echo "PostDown = ${POST_DOWN}"; fi
+    echo ""
+    echo "[Peer]"
+    echo "Endpoint = ${END_POINT}"
+    echo "PublicKey = ${PUBLIC_KEY}"
+    echo "AllowedIPs = ${ALLOWED_IPS:-0.0.0.0/0}"
+    echo "PersistentKeepalive = ${PERSISTENT_KEEP_ALIVE:-25}"
+  } > /etc/wireguard/wg0.conf
+  sync
+})
 
 echo "[$(date -Iseconds)] Connecting..."
 wg-quick up wg0
