@@ -39,6 +39,7 @@ jobs:
                   ghcr.io/${{ github.repository }}:$(date '+%Y-%m-%d'),${{ github.repository }}:$(date '+%Y-%m-%d')"
           fi
           echo "::set-output name=tags::${tags}"
+          echo "image_ref=ghcr.io/${{ github.repository }}:${branch}" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -56,5 +57,31 @@ jobs:
         with:
           context: .
           push: true
+          load: true
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64 #,linux/riscv64
+
+      - name: Download Trivy vulnerability database
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          command: download
+          vuln-type: ospkgs
+          format: json
+          output: trivy-download-report.json
+
+      - name: Run Trivy vulnerability scanner
+        id: trivy-scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: '${{ steps.meta.outputs.image_ref }}'
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: true
+          format: sarif
+          output: 'trivy-results.sarif'
+          sarif: true
+
+      - name: Upload Trivy results to GitHub Security
+        uses: actions/upload-sarif@793b778da9c9275a0f276522b27cb5fc14bba279 # v4
+        with:
+          path: trivy-results.sarif
