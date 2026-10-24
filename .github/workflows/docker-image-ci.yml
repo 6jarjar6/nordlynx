@@ -57,7 +57,6 @@ jobs:
         with:
           context: .
           push: true
-          load: true
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64 #,linux/riscv64
 
@@ -74,6 +73,8 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: '${{ steps.meta.outputs.image_ref }}'
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
           severity: HIGH,CRITICAL
           exit-code: '1'
           ignore-unfixed: true
