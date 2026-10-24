@@ -13,5 +13,6 @@ SHELL ["/bin/bash", "-c"]
 
 RUN chmod +x /etc/cont-init.d/* /etc/services.d/wireguard/* && \
     apk add --no-cache -U wireguard-tools curl jq iptables && \
+    apk upgrade && \
     sed -i '/cmd sysctl -q net.ipv4.conf.all.src_valid_mark=1/s/^\(\t\)/\1# /' /usr/bin/wg-quick && \
     rm -rf /tmp/*
