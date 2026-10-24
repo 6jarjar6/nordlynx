@@ -3,5 +3,8 @@
 iptables-nft -P OUTPUT DROP
 iptables-nft -P INPUT DROP
 iptables-nft -P FORWARD DROP
+ip6tables-nft -P OUTPUT DROP
+ip6tables-nft -P INPUT DROP
+ip6tables-nft -P FORWARD DROP
 
 echo "[$(date -Iseconds)] Firewall is up, everything has to go through the vpn"
