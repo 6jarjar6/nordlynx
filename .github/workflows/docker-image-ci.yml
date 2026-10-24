@@ -67,6 +67,7 @@ jobs:
           scan-type: image
           image-ref: '${{ steps.meta.outputs.image_ref }}'
           github-pat: ${{ secrets.GITHUB_TOKEN }}
+          version: 0.76.1
           severity: HIGH,CRITICAL
           exit-code: '1'
           ignore-unfixed: true
