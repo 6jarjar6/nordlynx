@@ -66,14 +66,12 @@ jobs:
         with:
           scan-type: image
           image-ref: '${{ steps.meta.outputs.image_ref }}'
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
           severity: HIGH,CRITICAL
           exit-code: '1'
           ignore-unfixed: true
           format: sarif
           output: 'trivy-results.sarif'
-          sarif: true
 
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@793b778da9c9275a0f276522b27cb5fc14bba279 # v4
