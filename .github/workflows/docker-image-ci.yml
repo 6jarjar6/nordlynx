@@ -11,6 +11,11 @@ on:
       - 'release/*'
       - 'renovate/*'
 
+# Least-privilege token permissions (CodeQL alert: missing explicit permissions)
+permissions:
+  contents: read
+  packages: write
+  security-events: write
 
 jobs:
   build:
