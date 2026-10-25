@@ -4,27 +4,22 @@ if [[ -z ${PUBLIC_KEY} || -z ${END_POINT} ]]; then
   echo "[$(date -Iseconds)] Finding the best server..."
   tech_filter="filters[servers_technologies][identifier]=wireguard_udp"
 
-  # Map the ISO country code (if provided) to the numeric ID the API expects.
-  country_filter=""
+  # The recommendations endpoint is geo-personalized (best server near the caller)
+  # and does not honor country or technology filters. COUNTRY_CODE is accepted
+  # for compatibility but is informational only.
   if [[ -n ${COUNTRY_CODE} ]]; then
-    country_id=$(curl --silent --retry 3 --show-error --globoff "https://api.nordvpn.com/v1/servers/countries" | jq --raw-output ".[] | select(.code == \"${COUNTRY_CODE}\") | .id")
-    if [[ -z ${country_id} ]]; then
-      echo "[$(date -Iseconds)] WARNING: COUNTRY_CODE='${COUNTRY_CODE}' is not a recognized country. Selecting the best server worldwide."
-    else
-      echo "[$(date -Iseconds)] Country ID: ${country_id}"
-      country_filter="filters[country_id]=${country_id}"
-    fi
+    echo "[$(date -Iseconds)] NOTE: COUNTRY_CODE='${COUNTRY_CODE}' is accepted for compatibility, but the recommendations endpoint is geo-personalized (best near you) and does not honor country filtering. Selecting the best server near you."
   fi
 
+  # limit/offset are the only two knobs the recommendations endpoint honors.
+  limit=${LIMIT:-1}
+  offset=${OFFSET:-0}
+
   # Assemble the query. Append fragments only when they are supplied.
-  api_url="https://api.nordvpn.com/v1/servers/recommendations?${tech_filter}"
-  if [[ -n ${country_filter} ]]; then
-    api_url="${api_url}&${country_filter}"
-  fi
+  api_url="https://api.nordvpn.com/v1/servers/recommendations?${tech_filter}&limit=${limit}&offset=${offset}"
   if [[ -n ${QUERY} ]]; then
     api_url="${api_url}&${QUERY}"
   fi
-  api_url="${api_url}&limit=1"
   echo "[$(date -Iseconds)] API URL: ${api_url}"
 
   # Retry the selection. The API can be transiently unavailable, and a single
