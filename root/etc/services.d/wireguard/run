@@ -126,28 +126,25 @@ while :; do
     fi
   fi
 
-  # Parse the latest handshake (relative: "25 seconds ago", "4 minutes ago", "never")
-  lh=$(wg show wg0 2>/dev/null | grep 'latest handshake' | sed 's/.*latest handshake: //')
-  case "${lh}" in
-    "never"|"-"|"")
-      age=999999
-      ;;
-    *seconds\ ago)
-      age=$(echo "${lh}" | awk '{print $1}')
-      ;;
-    *minutes\ ago)
-      age=$(echo "${lh}" | awk '{print $1}')
-      age=$((age * 60))
-      ;;
-    *)
-      age=999999
-      ;;
-  esac
+  # Parse the latest handshake as an absolute epoch (robust to the compound
+  # "N minutes, N seconds ago" human format that 'wg show' can emit).
+  hs_epoch=$(wg show wg0 latest-handshakes 2>/dev/null | awk '{print $NF}' | sort -rn | head -1)
+  now=$(date +%s)
+  if [ -z "$hs_epoch" ] || [ "$hs_epoch" -lt 1 ]; then
+    age=999999              # never handshake
+  else
+    age=$((now - hs_epoch))
+    (( age < 0 )) && age=0  # clock wound backward
+  fi
+  # If the interface is gone, treat it as dead
+  if [ -z "$interface" ] || ! ip link show "$interface" 2>/dev/null; then
+    age=999999
+  fi
 
   if [[ ${age} =~ ^[0-9]+$ ]] && (( age > dead_seconds )); then
     now_ts=$(date +%s)
     if (( now_ts - ${last_resurrect} >= cooldown )); then
-      echo "[$(date -Iseconds)] ERROR: tunnel dead (last handshake ${lh}). Flushing conntrack (fail-closed) and re-establishing."
+      echo "[$(date -Iseconds)] ERROR: tunnel dead (last handshake ${age}s ago). Flushing conntrack (fail-closed) and re-establishing."
       conntrack -F 2>/dev/null || echo "[$(date -Iseconds)] WARNING: conntrack flush failed (missing conntrack or NET_ADMIN)."
       last_resurrect=$now_ts
       wg-quick up wg0 || echo "[$(date -Iseconds)] WARNING: re-establishment failed. Will keep supervising."
