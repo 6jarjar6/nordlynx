@@ -15,6 +15,8 @@ for interface in "${interfaces[@]}"; do
   if [ "$network_found" = false ]; then
     iptables-nft -F
     iptables-nft -X
+    ip6tables-nft -F
+    ip6tables-nft -X
   fi
   echo "[$(date -Iseconds)] Enabling connection to ${interface} ${inet}"
   iptables-nft -A INPUT -i "$interface" -s "${inet}" -j ACCEPT
@@ -44,6 +46,31 @@ iptables-nft -t nat -A POSTROUTING -o wg+ -j MASQUERADE
 
 iptables-nft -A OUTPUT -o "$iface" -p udp -m udp --dport 53 -j ACCEPT
 iptables-nft -A OUTPUT -o "$iface" -p udp -m udp --dport 51820 -j ACCEPT
+
+ip6tables-nft -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+ip6tables-nft -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+ip6tables-nft -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+ip6tables-nft -A INPUT -i lo -j ACCEPT
+ip6tables-nft -A OUTPUT -o lo -j ACCEPT
+ip6tables-nft -A FORWARD -i lo -j ACCEPT
+
+ip6tables-nft -A OUTPUT -o wg+ -j ACCEPT
+ip6tables-nft -t nat -A POSTROUTING -o wg+ -j MASQUERADE
+
+# There is no IPv6 route into the tunnel by default (AllowedIPs is IPv4-only),
+# so IPv6 DNS/WireGuard-port egress on the physical interface would leak in
+# cleartext, bypassing the VPN. Only allow the WireGuard handshake port on the
+# physical interface when the endpoint is IPv6, constrained to that address.
+# (IPv6 DNS over the tunnel is covered by the wg+ rule above.)
+_ep_host="${END_POINT%:*}"
+if [[ "${END_POINT}" == "["* ]]; then
+  _ep_host="${_ep_host#[}"
+  _ep_host="${_ep_host%]}"
+fi
+if [[ "${_ep_host}" == *:* ]]; then
+  ip6tables-nft -A OUTPUT -o "$iface" -d "$_ep_host" -p udp -m udp --dport 51820 -j ACCEPT
+fi
 while true; do
   iptables-nft -A OUTPUT -o "$iface" -d api.nordvpn.com -p tcp --dport 443 -j ACCEPT\
     || {

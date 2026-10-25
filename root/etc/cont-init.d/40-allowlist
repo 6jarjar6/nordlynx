@@ -1,10 +1,11 @@
 #!/usr/bin/with-contenv bash
 
+iface=${INTERFACE:-eth0}
 [[ -n ${WHITELIST} && -z ${ALLOW_LIST} ]] && ALLOW_LIST=${WHITELIST}
 if [[ -n ${ALLOW_LIST} ]]; then
   for domain in ${ALLOW_LIST//[;,]/ }; do
-    domain=$(echo "$domain" | sed 's/^.*:\/\///;s/\/.*$//')
+    domain=$(echo "$domain" | sed 's|^.*://||;s|/.*$||')
     echo "[$(date -Iseconds)] Enabling connection to host ${domain}"
-    iptables-nft  -A OUTPUT -o eth0 -d "${domain}" -j ACCEPT 2>/dev/null
+    iptables-nft -A OUTPUT -o "$iface" -d "${domain}" -j ACCEPT 2>/dev/null
   done
 fi

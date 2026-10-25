@@ -9,11 +9,38 @@ else
 fi
 
 if ! iptables-nft -L > /dev/null 2>&1; then
-  echo "[$(date -Iseconds)] iptables-nft is not functional. Ensure your container config adds --cap-add=NET_RAW" 
+  echo "[$(date -Iseconds)] iptables-nft is not functional. Ensure your container config adds --cap-add=NET_RAW"
   sleep infinity
 fi
 
+if ! ip6tables-nft -L > /dev/null 2>&1; then
+  # Detect whether IPv6 is present (available) in the container:
+  # a non-loopback IPv6 address, or a loadable IPv6 stack (kernel has the
+  # IPv6 subsystem, not globally disabled). A point-in-time default-route check
+  # is insufficient: router advertisements or network attaches after startup can
+  # install IPv6 routes, and on-link/ULA/link-local peers can reach the
+  # container without any default route.
+  ipv6_present=0
+  # Strong signal: any non-loopback IPv6 address
+  if [ -r /proc/net/if_inet6 ] && grep -qvE '[[:space:]]lo[[:space:]]*$' /proc/net/if_inet6; then
+    ipv6_present=1
+  fi
+  # Weak signal: loadable IPv6 stack (kernel has IPv6 subsystem, not globally disabled)
+  if [ -d /proc/sys/net/ipv6 ]; then
+    gdisp=$(cat /proc/sys/net/ipv6/conf/all/disable_ipv6 2>/dev/null)
+    if [ "${gdisp}" != "1" ]; then
+      ipv6_present=1
+    fi
+  fi
+  if [ "$ipv6_present" -eq 1 ]; then
+    echo "[$(date -Iseconds)] ERROR: ip6tables-nft is not functional while IPv6 is present in the container. Refusing to start without an IPv6 kill switch. Ensure the host kernel supports IPv6 and the container config adds --cap-add=NET_ADMIN, or disable IPv6 (e.g. --sysctl net.ipv6.conf.all.disable_ipv6=1)."
+    sleep infinity
+  else
+    echo "[$(date -Iseconds)] WARNING: ip6tables-nft is not functional; IPv6 appears absent in the container, so no IPv6 stack to protect. Continuing without an IPv6 kill switch."
+  fi
+fi
+
 if [[ -z ${PRIVATE_KEY} ]] && [[ -z ${PRIVATE_KEY_FILE} ]] ; then
-  echo "[$(date -Iseconds)] Missing PRIVATE_KEY, and, PRIVATE_KEY_FILE, try \`docker run --rm --cap-add=NET_ADMIN -e TOKEN=XXX bubuntux/nordvpn:get_private_key\` with access token or follow this instructions https://forum.openwrt.org/t/instruction-config-nordvpn-wireguard-nordlynx-on-openwrt/89976 to obtain the private key."
+  echo "[$(date -Iseconds)] Missing PRIVATE_KEY and PRIVATE_KEY_FILE. Try \`docker run --rm --cap-add=NET_ADMIN -e TOKEN=XXX bubuntux/nordvpn:get_private_key\` with an access token, or follow these instructions to obtain the private key: https://forum.openwrt.org/t/instruction-config-nordvpn-wireguard-nordlynx-on-openwrt/89976"
   sleep infinity
 fi
