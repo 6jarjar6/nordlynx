@@ -58,8 +58,19 @@ ip6tables-nft -A FORWARD -i lo -j ACCEPT
 ip6tables-nft -A OUTPUT -o wg+ -j ACCEPT
 ip6tables-nft -t nat -A POSTROUTING -o wg+ -j MASQUERADE
 
-ip6tables-nft -A OUTPUT -o "$iface" -p udp -m udp --dport 53 -j ACCEPT
-ip6tables-nft -A OUTPUT -o "$iface" -p udp -m udp --dport 51820 -j ACCEPT
+# There is no IPv6 route into the tunnel by default (AllowedIPs is IPv4-only),
+# so IPv6 DNS/WireGuard-port egress on the physical interface would leak in
+# cleartext, bypassing the VPN. Only allow the WireGuard handshake port on the
+# physical interface when the endpoint is IPv6, constrained to that address.
+# (IPv6 DNS over the tunnel is covered by the wg+ rule above.)
+_ep_host="${END_POINT%:*}"
+if [[ "${END_POINT}" == "["* ]]; then
+  _ep_host="${_ep_host#[}"
+  _ep_host="${_ep_host%]}"
+fi
+if [[ "${_ep_host}" == *:* ]]; then
+  ip6tables-nft -A OUTPUT -o "$iface" -d "$_ep_host" -p udp -m udp --dport 51820 -j ACCEPT
+fi
 while true; do
   iptables-nft -A OUTPUT -o "$iface" -d api.nordvpn.com -p tcp --dport 443 -j ACCEPT\
     || {
