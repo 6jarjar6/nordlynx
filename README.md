@@ -50,6 +50,16 @@ internal DNS to return the private rather than public IP when connecting locally
 Both of these approaches have positives and negatives however their setup is out of scope for this document as
 everyone's network layout and equipment will be different.
 
+## Failure Modes
+
+The container is **fail-closed** by default: all ingress/egress traffic is denied (`-P DROP`), and only the scoped exceptions required for the VPN handshake, DNS, the API, and the local networks you opted into are opened.
+
+| Scenario | Behavior |
+|:------|:-----|
+| **Tunnel dead** | A watchdog watches the latest handshake. If it stales (≥120s), the connection tracker is flushed — clearing the `ESTABLISHED,RELATED` output window — before the tunnel is re-established. Established connections therefore cannot ride the `eth0` route while the tunnel is down. |
+| **Missing capabilities** | The container refuses to start if the WireGuard module, `iptables-nft`, `ip6tables-nft` (when IPv6 is present), or the private key is missing. |
+| **`eth0` default route** | The default route via `eth0` is cosmetic. The firewall policy, not the routing, is what guarantees traffic cannot leak out via `eth0` when the tunnel drops. |
+
 ## Usage
 
 Here are some example snippets to help you get started creating a container.

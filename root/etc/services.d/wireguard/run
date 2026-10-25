@@ -84,7 +84,73 @@ echo "[$(date -Iseconds)] DNS configured: ${dns//,/ }"
 
 echo "[$(date -Iseconds)] Connected! \(ᵔᵕᵔ)/"
 
-if [[ -n ${RECONNECT} ]]; then
-  echo "[$(date -Iseconds)] Reconnecting in ${RECONNECT} seconds"
+# ---------------------------------------------------------------------------
+# Post-connect supervision.
+#
+# A wg-quick up that succeeds at startup does not guarantee the tunnel stays
+# alive. If the peer dies (server restart, host reboot, WAN fault), the tunnel
+# goes dark silently. The default-deny policy still protects, but the
+# ESTABLISHED,RELATED output window is open: established connections can keep
+# riding eth0. Supervise the latest handshake; when it stalls (older than
+# DEAD_SECONDS, or never occurred) the tunnel is dead:
+#   1. conntrack -F  — flush all established state so the
+#                      ESTABLISHED,RELATED rule matches nothing and the
+#                      default-deny policy closes the leak (fail-closed).
+#   2. wg-quick up   — re-establish the tunnel.
+# RESPECT_RECONNECT: if RECONNECT is set, hand off to the supervisor after that
+# many seconds (it restarts the service and reselects the server).
+# ---------------------------------------------------------------------------
+dead_seconds=120        # ~4.8x the 25s PersistentKeepAlive
+check_interval=15
+cooldown=60             # min gap between forced re-establishments (anti-flap)
+
+have_timer=0
+if [[ -n ${RECONNECT} ]] && [[ ${RECONNECT} =~ ^[0-9]+$ ]]; then
+  have_timer=1
 fi
-sleep "${RECONNECT:-infinity}"
+if (( have_timer )); then
+  echo "[$(date -Iseconds)] Reconnecting in ${RECONNECT} seconds (supervising the tunnel in the meantime)"
+fi
+
+WG_WATCHDOG_EPOCH_SECS=0
+last_resurrect=0
+while :; do
+  sleep "${check_interval}"
+
+  if (( have_timer )); then
+    # Approximate elapsed time; the supervisor restarts the service, so we
+    # only need to hand off once RECONNECT seconds have passed.
+    WG_WATCHDOG_EPOCH_SECS=$((WG_WATCHDOG_EPOCH_SECS + check_interval))
+    if (( WG_WATCHDOG_EPOCH_SECS >= RECONNECT )); then
+      break
+    fi
+  fi
+
+  # Parse the latest handshake (relative: "25 seconds ago", "4 minutes ago", "never")
+  lh=$(wg show wg0 2>/dev/null | grep 'latest handshake' | sed 's/.*latest handshake: //')
+  case "${lh}" in
+    "never"|"-"|"")
+      age=999999
+      ;;
+    *seconds\ ago)
+      age=$(echo "${lh}" | awk '{print $1}')
+      ;;
+    *minutes\ ago)
+      age=$(echo "${lh}" | awk '{print $1}')
+      age=$((age * 60))
+      ;;
+    *)
+      age=999999
+      ;;
+  esac
+
+  if [[ ${age} =~ ^[0-9]+$ ]] && (( age > dead_seconds )); then
+    now_ts=$(date +%s)
+    if (( now_ts - ${last_resurrect} >= cooldown )); then
+      echo "[$(date -Iseconds)] ERROR: tunnel dead (last handshake ${lh}). Flushing conntrack (fail-closed) and re-establishing."
+      conntrack -F 2>/dev/null || echo "[$(date -Iseconds)] WARNING: conntrack flush failed (missing conntrack or NET_ADMIN)."
+      last_resurrect=$now_ts
+      wg-quick up wg0 || echo "[$(date -Iseconds)] WARNING: re-establishment failed. Will keep supervising."
+    fi
+  fi
+done

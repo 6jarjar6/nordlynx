@@ -7,5 +7,6 @@ if [[ -n ${ALLOW_LIST} ]]; then
     domain=$(echo "$domain" | sed 's|^.*://||;s|/.*$||')
     echo "[$(date -Iseconds)] Enabling connection to host ${domain}"
     iptables-nft -A OUTPUT -o "$iface" -d "${domain}" -j ACCEPT 2>/dev/null
+    ip6tables-nft -A OUTPUT -o "$iface" -d "${domain}" -j ACCEPT 2>/dev/null
   done
 fi
