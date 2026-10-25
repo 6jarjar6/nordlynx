@@ -13,6 +13,11 @@ if ! iptables-nft -L > /dev/null 2>&1; then
   sleep infinity
 fi
 
+if ! ip6tables-nft -L > /dev/null 2>&1; then
+  echo "[$(date -Iseconds)] ip6tables-nft is not functional. Ensure your container config adds --cap-add=NET_RAW and the host kernel supports IPv6"
+  sleep infinity
+fi
+
 if [[ -z ${PRIVATE_KEY} ]] && [[ -z ${PRIVATE_KEY_FILE} ]] ; then
   echo "[$(date -Iseconds)] Missing PRIVATE_KEY and PRIVATE_KEY_FILE. Try \`docker run --rm --cap-add=NET_ADMIN -e TOKEN=XXX bubuntux/nordvpn:get_private_key\` with an access token, or follow these instructions to obtain the private key: https://forum.openwrt.org/t/instruction-config-nordvpn-wireguard-nordlynx-on-openwrt/89976"
   sleep infinity
