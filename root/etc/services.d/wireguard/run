@@ -1,15 +1,8 @@
 #!/usr/bin/with-contenv bash
 
 if [[ -z ${PUBLIC_KEY} || -z ${END_POINT} ]]; then
-  echo "[$(date -Iseconds)] Finding the best server..."
+  echo "[$(date -Iseconds)] Finding the best server... (best server near you; the recommendation API is geo-personalized)"
   tech_filter="filters[servers_technologies][identifier]=wireguard_udp"
-
-  # The recommendations endpoint is geo-personalized (best server near the caller)
-  # and does not honor country or technology filters. COUNTRY_CODE is accepted
-  # for compatibility but is informational only.
-  if [[ -n ${COUNTRY_CODE} ]]; then
-    echo "[$(date -Iseconds)] NOTE: COUNTRY_CODE='${COUNTRY_CODE}' is accepted for compatibility, but the recommendations endpoint is geo-personalized (best near you) and does not honor country filtering. Selecting the best server near you."
-  fi
 
   # limit/offset are the only two knobs the recommendations endpoint honors.
   limit=${LIMIT:-1}

@@ -116,7 +116,6 @@ Wireguard module is required, please install it [manually](https://www.wireguard
 |         `PERSISTENT_KEEP_ALIVE`          |       25       | A second interval, between 1 and 65535 inclusive, of how often to send an authenticated empty packet to the peer for the purpose of keeping a stateful firewall or NAT mapping valid persistently.
 | `PRE_UP`/`POST_UP`<br/>`PRE_DOWN`/`POST_DOWN` |                | Script snippets which will be executed by bash before/after setting up/tearing down the interface, most commonly used to configure custom DNS options or firewall rules. The special string `%i` is expanded to INTERFACE. For Synology, read [this](https://github.com/bubuntux/nordlynx/wiki/Synology).
 |                 `QUERY`                  |                | Query for the api nordvpn (see https://sleeplessbeastie.eu/2019/02/18/how-to-use-public-nordvpn-api/)
-|              `COUNTRY_CODE`              |                | Accepted for compatibility, but the recommendations API is geo-personalized (best server near you) and does not honor country filtering. Prints an informational note only. |
 |                    `LIMIT`               |        1       | Number of servers to request from the recommendations API (the only knob besides `OFFSET` it honors). |
 |                   `OFFSET`               |        0       | Index into the recommendations API list to select from (shifts the list server-side). |
 |               `PUBLIC_KEY`               |                | Public key of the server to connect (auto select base on recommendation api).
