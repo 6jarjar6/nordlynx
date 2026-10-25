@@ -9,19 +9,19 @@
 
 ## Quick reference
 
-- **Forked from **: [Julio Gutierrez](https://github.com/bubuntux)
-- **Maintained by **: [6jarjar6](https://github.com/6jarjar6)
+- **Forked from**: [Julio Gutierrez](https://github.com/bubuntux)
+- **Maintained by**: [6jarjar6](https://github.com/6jarjar6)
 - **Where to get help**: [Github discussions](https://github.com/6jarjar6/nordlynx/discussions)
 
 ## Supported tags
 
 - latest (updated monthly)
-- YYYY-mm-dd (created monthly)
+- YYYY-MM-DD (created monthly)
 
 ## Quick reference (cont.)
 
 - **Where to file issues**: [Github issues](https://github.com/6jarjar6/nordlynx/issues)
-- **Supported architecture**: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64)) amd64, arm64, riscv64
+- **Supported architecture**: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64)) amd64, arm64
 - **Published image artifact details**: [DockerHub](https://hub.docker.com/r/6jarjar6/nordlynx), [Github packages](https://github.com/6jarjar6/nordlynx/pkgs/container/nordlynx)
 - **Continuous integration**: [Github actions](https://github.com/6jarjar6/nordlynx/actions/workflows/docker-image-ci.yml)
 - **Source**: [Github](https://github.com/6jarjar6/nordlynx)
@@ -80,7 +80,7 @@ services:
     environment:
       - PRIVATE_KEY_FILE=/run/secrets/privatekey
     secrets:
-      - privatekey 
+      - privatekey
 secrets:
   privatekey:
     file: ./privatekey.txt
@@ -99,59 +99,60 @@ Review the [wiki](https://github.com/6jarjar6/nordlynx/wiki) for more practical 
 
 ## Module
 
-Wireguard module is required, please install it [manually](https://www.wireguard.com/install) if need it.
+Wireguard module is required, please install it [manually](https://www.wireguard.com/install) if needed.
 
 ## Environment
 
-|                 Variable                 |    Default     | Description |
-|:-----------------------------------------|:--------------:| --- |
-|              `PRIVATE_KEY`               | **[Required]** | See [How To Get Your `PRIVATE_KEY`](#how-to-get-your-private_key) or these [instructions](https://forum.openwrt.org/t/instruction-config-nordvpn-wireguard-nordlynx-on-openwrt/89976).
-|              `PRIVATE_KEY_FILE`          |                | File from which to get PASS, if using docker secrets this should be set to /run/secrets/<secret_name>. This file should contain just the account password on the first line.
-|              `LISTEN_PORT`               |     51820      | A 16-bit port for listening.
-|               `INTERFACE`                |      eth0      | The network interface to use inside the container.
-|                `ADDRESS`                 |  10.5.0.2/32   | A comma-separated list of IP (v4 or v6) addresses (optionally with CIDR masks) to be assigned to the interface.
-|                  `DNS`                   |  [103.86.96.100<br/>103.86.99.100](https://support.nordvpn.com/General-info/1047409702/What-are-your-DNS-server-addresses.htm)  | A comma-separated list of IP (v4 or v6) addresses to be set as the interface's DNS servers, or non-IP hostnames to be set as the interface's DNS search domains.
-|                 `TABLE`                  |                | Controls the routing table to which routes are added. There are two special values: `off` disables the creation of routes altogether, and `auto` (suggested for most users) adds routes to the default table and enables special handling of default routes.
-|              `ALLOWED_IPS`               |   0.0.0.0/0    | A comma-separated list of IP (v4 or v6) addresses with CIDR masks from which incoming traffic for this peer is allowed and to which outgoing traffic for this peer is directed. For Synology, read [this](https://github.com/bubuntux/nordlynx/wiki/Synology).
-|         `PERSISTENT_KEEP_ALIVE`          |       25       | A second interval, between 1 and 65535 inclusive, of how often to send an authenticated empty packet to the peer for the purpose of keeping a stateful firewall or NAT mapping valid persistently.
-| `PRE_UP`/`POST_UP`<br/>`PRE_DOWN`/`POST_DOWN` |                | Script snippets which will be executed by bash before/after setting up/tearing down the interface, most commonly used to configure custom DNS options or firewall rules. The special string `%i` is expanded to INTERFACE. For Synology, read [this](https://github.com/bubuntux/nordlynx/wiki/Synology).
-|                 `QUERY`                  |                | Query for the api nordvpn (see https://sleeplessbeastie.eu/2019/02/18/how-to-use-public-nordvpn-api/)
-|              `COUNTRY_CODE`              |                | Country code to filter server list.
-|               `PUBLIC_KEY`               |                | Public key of the server to connect (auto select base on recommendation api).
-|               `END_POINT`                |                | Ip address of the server to connect (auto select base on recommendation api).
-|               `ALLOW_LIST`               |                | List of domains that are going to be accessible _outside_ vpn (IE rarbg.to,yts.mx).
-|               `NET_LOCAL`                |                                                                                                                               | CIDR networks (IE 192.168.1.0/24), add a route to allows replies once the VPN is up.
-|               `NET6_LOCAL`               |                                                                                                                               | CIDR IPv6 networks (IE fe00:d34d:b33f::/64), add a route to allows replies once the VPN is up.
-|               `RECONNECT`                |                                                                                                                               | Time in seconds to re-establish the connection.
-|                   `TZ`                   |                                                              UTC                                                              | Specify a timezone to use EG Europe/London.
-
+| Variable | Details |
+|:-------|:-------|
+| `PRIVATE_KEY` | Default: _(required)_. See [How To Get Your `PRIVATE_KEY`](#how-to-get-your-private_key) or these [instructions](https://forum.openwrt.org/t/instruction-config-nordvpn-wireguard-nordlynx-on-openwrt/89976). |
+| `PRIVATE_KEY_FILE` | Default: _(none)_. File from which to get the private key. If using docker secrets this should be set to /run/secrets/<secret_name>. This file should contain just the private key on the first line. |
+| `LISTEN_PORT` | Default: 51820. A 16-bit port for listening. |
+| `INTERFACE` | Default: eth0. The network interface to use inside the container. |
+| `ADDRESS` | Default: 10.5.0.2/32. A comma-separated list of IP (v4 or v6) addresses (optionally with CIDR masks) to be assigned to the interface. |
+| `DNS` | Default: [103.86.96.100<br/>103.86.99.100](https://support.nordvpn.com/General-info/1047409702/What-are-your-DNS-server-addresses.htm). A comma-separated list of IP (v4 or v6) addresses to be set as the interface's DNS servers, or non-IP hostnames to be set as the interface's DNS search domains. |
+| `TABLE` | Default: _(none)_. Controls the routing table to which routes are added. There are two special values: `off` disables the creation of routes altogether, and `auto` (suggested for most users) adds routes to the default table and enables special handling of default routes. |
+| `ALLOWED_IPS` | Default: 0.0.0.0/0. A comma-separated list of IP (v4 or v6) addresses with CIDR masks from which incoming traffic for this peer is allowed and to which outgoing traffic for this peer is directed. For Synology, read [this](https://github.com/bubuntux/nordlynx/wiki/Synology). |
+| `PERSISTENT_KEEP_ALIVE` | Default: 25. A second interval, between 1 and 65535 inclusive, of how often to send an authenticated empty packet to the peer for the purpose of keeping a stateful firewall or NAT mapping valid persistently. |
+| `PRE_UP` / `POST_UP` / `PRE_DOWN` / `POST_DOWN` | Default: _(none)_. Script snippets which will be executed by bash before/after setting up/tearing down the interface, most commonly used to configure custom DNS options or firewall rules. The special string `%i` is expanded to INTERFACE. For Synology, read [this](https://github.com/bubuntux/nordlynx/wiki/Synology). |
+| `QUERY` | Default: _(none)_. Raw query string appended to the recommendation API URL. Note: the endpoint only honors `limit`/`offset`; other filters (country, group, technology) are ignored. |
+| `LIMIT` | Default: 1. Number of servers to request from the recommendations API (the only knob besides `OFFSET` it honors). |
+| `OFFSET` | Default: 0. Index into the recommendations API list to select from (shifts the list server-side). |
+| `PUBLIC_KEY` | Default: _(none)_. Public key of the server to connect (auto-select based on the recommendation API). |
+| `END_POINT` | Default: _(none)_. IP address of the server to connect (auto-select based on the recommendation API). |
+| `ALLOW_LIST` | Default: _(none)_. List of domains that are going to be accessible _outside_ vpn (eg. rarbg.to, yts.mx). |
+| `NET_LOCAL` | Default: _(none)_. CIDR networks (eg. 192.168.1.0/24), add a route to allow replies once the VPN is up. |
+| `NET6_LOCAL` | Default: _(none)_. CIDR IPv6 networks (eg. fe00:d34d:b33f::/64), add a route to allow replies once the VPN is up. |
+| `RECONNECT` | Default: _(none)_. Time in seconds to re-establish the connection. |
+| `NO_CONNECTION_RETRY` | Default: 5. Seconds to wait before retrying the initial `wg-quick up` if it fails. |
+| `TZ` | Default: UTC. Specify a timezone to use eg. Europe/London. |
 ### How To Get Your `PRIVATE_KEY`
 
-To get your `PRIVATE_KEY` you will need to get an access token from the NordVPN website and then use the https://github.com/bubuntux/nordvpn container.
+To get your `PRIVATE_KEY` you will need to get an access token from the NordVPN website and then use the [`bubuntux/nordvpn`](https://github.com/bubuntux/nordvpn) container.
 
 1. Log in to https://nordvpn.com/
 2. On the left side, click on **NordVPN**
 3. In the middle, under **Manual setup**, click on **Set up NordVPN manually** and go through the verification process
 4. On the new page, in the middle, in the **Access token** box, click on **Generate new token**
 5. In the **Generate new token?** pop-up box, select **Set to expire in 30 days** and click **Generate token**
-6. In the **Copy access token** pop-up box, click the **Copy** linnk to copy your token
-7. From your computer where Docker is installed, run the below command and replace `{{{TOKEN}}}` with what you copied from step 6 above:
+6. In the **Copy access token** pop-up box, click the **Copy** link to copy your token
+7. From your computer where Docker is installed, run the command below and replace `{{{TOKEN}}}` with what you copied from step 6 above:
 
     ```
     docker run --rm --cap-add=NET_ADMIN -e TOKEN={{{TOKEN}}} ghcr.io/bubuntux/nordvpn:get_private_key
     ```
 
-8. Docker will do it's thing and spit  out your `PRIVATE_KEY`:
+8. Docker will do its thing and spit out your `PRIVATE_KEY`:
 
     ```
     user@hostname:~/docker> docker run --rm --cap-add=NET_ADMIN -e TOKEN=[redacted] ghcr.io/bubuntux/nordvpn:get_private_key
     Unable to find image 'ghcr.io/bubuntux/nordvpn:get_private_key' locally
     get_private_key: Pulling from bubuntux/nordvpn
-    06d39c85623a: Pull complete 
-    3e1c241a05c8: Pull complete 
-    0077b26e8dce: Pull complete 
+    06d39c85623a: Pull complete
+    3e1c241a05c8: Pull complete
+    0077b26e8dce: Pull complete
     Digest: sha256:0d91aabb4511d400b01e930654950729a4e859d3c250f61664662b0ed7027c56
-    Status: Downloaded newer image for ghcr.io/6jarjar6/nordvpn:get_private_key
+    Status: Downloaded newer image for ghcr.io/bubuntux/nordvpn:get_private_key
     Waiting for daemon to start up...
     A new version of NordVPN is available! Please update the application.
     Welcome to NordVPN! You can now connect to VPN by using 'nordvpn connect'.
@@ -164,10 +165,10 @@ To get your `PRIVATE_KEY` you will need to get an access token from the NordVPN 
     IP: 10.5.0.2/32
     Private Key: [!!! THIS IS YOUR PRIVATE_KEY YOU NEED !!!]
     ＼(＾O＾)／############################################################
-    user@hostname:~/docker> 
+    user@hostname:~/docker>
     ```
 
-9. Copy everything after `Privatey Key: ` (note the space after `:`) to the end of the line -- this is your `PRIVATE_KEY`
+9. Copy everything after `Private Key: ` (note the space after `:`) to the end of the line -- this is your `PRIVATE_KEY`
 
 ## Sysctl
 
@@ -180,7 +181,7 @@ To get your `PRIVATE_KEY` you will need to get an access token from the NordVPN 
 
 ### nordlynx VPN container
 
-This example will start a nordlynx VPN container on a `legacy_p2p` VPN server.
+This example will start a nordlynx VPN container.
 
 ``` yaml
 services:
@@ -193,7 +194,6 @@ services:
             - SYS_MODULE                            # maybe
         environment:
             - PRIVATE_KEY=[redacted]                # required
-            - QUERY=filters\[servers_groups\]\[identifier\]=legacy_p2p
             - NET_LOCAL=192.168.0.0/16
             - TZ=America/New_York
         sysctls:
@@ -226,14 +226,13 @@ services:
             - SYS_MODULE                            # maybe
         environment:
             - PRIVATE_KEY=[redacted]                # required
-            - QUERY=filters\[servers_groups\]\[identifier\]=legacy_p2p
             - NET_LOCAL=192.168.0.0/16
             - TZ=America/New_York
         sysctls:
             - net.ipv4.conf.all.src_valid_mark=1   # maybe
             - net.ipv4.conf.all.rp_filter=2        # maybe; set reverse path filter to loose mode
             - net.ipv6.conf.all.disable_ipv6=1     # disable ipv6; recommended if using ipv4 only
-        
+
     firefox:
         image: lscr.io/linuxserver/firefox:latest
         # hostname: firefox                        # won't work when you do network_mode
@@ -242,8 +241,8 @@ services:
         depends_on:
             - nordlynx
         network_mode: service:nordlynx
-        # ports:                                   # won't work; you need to do this in the nordlynx VPN container 
-        #     - "3000:3000"                        # won't work; you need to do this in the nordlynx VPN container  
+        # ports:                                   # won't work; you need to do this in the nordlynx VPN container
+        #     - "3000:3000"                        # won't work; you need to do this in the nordlynx VPN container
         #     - "3001:3001"                        # won't work; you need to do this in the nordlynx VPN container
         volumes:
             - /path/to/config:/config
