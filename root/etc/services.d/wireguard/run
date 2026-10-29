@@ -136,9 +136,9 @@ while :; do
     age=$((now - hs_epoch))
     (( age < 0 )) && age=0  # clock wound backward
   fi
-  # If the interface is gone, treat it as dead
-  if [ -z "$interface" ] || ! ip link show "$interface" 2>/dev/null; then
-    age=999999
+  # If the tunnel interface is gone, treat it as dead
+  if ! ip link show wg0 2>/dev/null; then
+    age=999999              # interface gone
   fi
 
   if [[ ${age} =~ ^[0-9]+$ ]] && (( age > dead_seconds )); then
