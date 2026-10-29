@@ -147,6 +147,10 @@ while :; do
       echo "[$(date -Iseconds)] ERROR: tunnel dead (last handshake ${age}s ago). Flushing conntrack (fail-closed) and re-establishing."
       conntrack -F 2>/dev/null || echo "[$(date -Iseconds)] WARNING: conntrack flush failed (missing conntrack or NET_ADMIN)."
       last_resurrect=$now_ts
+      # Re-establish. wg-quick up fails if the interface already exists (the
+      # common case: peer dead but wg0 still present), so tear it down first,
+      # ignoring errors when the interface is already gone, then bring it up.
+      wg-quick down wg0 2>/dev/null || true
       wg-quick up wg0 || echo "[$(date -Iseconds)] WARNING: re-establishment failed. Will keep supervising."
     fi
   fi
