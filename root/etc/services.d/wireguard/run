@@ -128,7 +128,7 @@ while :; do
 
   # Parse the latest handshake as an absolute epoch (robust to the compound
   # "N minutes, N seconds ago" human format that 'wg show' can emit).
-  hs_epoch=$(wg show wg0 latest-handshakes 2>/dev/null | awk '{print $NF}' | sort -rn | head -1)
+  hs_epoch=$(wg show wg0 latest-handshakes 2>/dev/null | awk '{print $2}' | sort -rn | head -1)
   now=$(date +%s)
   if [ -z "$hs_epoch" ] || [ "$hs_epoch" -lt 1 ]; then
     age=999999              # never handshake
