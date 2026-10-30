@@ -103,6 +103,14 @@ echo "[$(date -Iseconds)] Connected! \(ᵔᵕᵔ)/"
 dead_seconds=120        # ~4.8x the 25s PersistentKeepAlive
 check_interval=15
 cooldown=60             # min gap between forced re-establishments (anti-flap)
+# Grace window (seconds) after each (re-)establishment before the dead check
+# arms. A fresh interface is pending its first handshake (the first
+# PersistentKeepAlive fires at +25s); judging deadness before that would
+# false-positive a healthy, pending tunnel and reset the interface in a kick
+# loop. Sized to dead_seconds so the first keepalive has registered comfortably
+# before the check is armed.
+grace_dead_seconds=120
+established_at=$(date +%s)
 
 have_timer=0
 if [[ -n ${RECONNECT} ]] && [[ ${RECONNECT} =~ ^[0-9]+$ ]]; then
@@ -124,6 +132,15 @@ while :; do
     if (( WG_WATCHDOG_EPOCH_SECS >= RECONNECT )); then
       break
     fi
+  fi
+
+  # Grace period: don't judge deadness within grace_dead_seconds of
+  # (re-)establishment. A fresh interface is pending its first handshake
+  # (first keepalive fires at +25s); killing it before then false-positives
+  # a healthy, pending tunnel.
+  now_wall=$(date +%s)
+  if (( now_wall - established_at <= grace_dead_seconds )); then
+    continue
   fi
 
   # wg emits the latest handshake as a human-readable duration such as
@@ -164,6 +181,10 @@ while :; do
       # ignoring errors when the interface is already gone, then bring it up.
       wg-quick down wg0 2>/dev/null || true
       wg-quick up wg0 || echo "[$(date -Iseconds)] WARNING: re-establishment failed. Will keep supervising."
+      # Fresh interface: the handshake is pending again (first keepalive at
+      # +25s). Re-arm the grace window so the dead check doesn't false-positive
+      # this interface before its first handshake can register.
+      established_at=$(date +%s)
     fi
   fi
 done
