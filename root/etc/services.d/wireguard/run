@@ -180,11 +180,17 @@ while :; do
       # common case: peer dead but wg0 still present), so tear it down first,
       # ignoring errors when the interface is already gone, then bring it up.
       wg-quick down wg0 2>/dev/null || true
-      wg-quick up wg0 || echo "[$(date -Iseconds)] WARNING: re-establishment failed. Will keep supervising."
-      # Fresh interface: the handshake is pending again (first keepalive at
-      # +25s). Re-arm the grace window so the dead check doesn't false-positive
-      # this interface before its first handshake can register.
-      established_at=$(date +%s)
+      if wg-quick up wg0; then
+        # Fresh interface: the handshake is pending again (first keepalive at
+        # +25s). Re-arm the grace window so the dead check doesn't false-positive
+        # this interface before its first handshake can register.
+        established_at=$(date +%s)
+      else
+        # Bring-up failed: the interface is dead. Do NOT reset the grace window
+        # — the dead check must stay armed (subject to cooldown) so this is
+        # rediscovered promptly instead of being shielded for another grace window.
+        echo "[$(date -Iseconds)] WARNING: re-establishment failed. Will keep supervising."
+      fi
     fi
   fi
 done
