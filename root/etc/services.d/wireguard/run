@@ -128,7 +128,7 @@ while :; do
 
   # Parse the latest handshake as an absolute epoch (robust to the compound
   # "N minutes, N seconds ago" human format that 'wg show' can emit).
-  hs_epoch=$(wg show wg0 latest-handshakes 2>/dev/null | awk '{print $NF}' | sort -rn | head -1)
+  hs_epoch=$(wg show wg0 latest-handshakes 2>/dev/null | awk '{print $2}' | sort -rn | head -1)
   now=$(date +%s)
   if [ -z "$hs_epoch" ] || [ "$hs_epoch" -lt 1 ]; then
     age=999999              # never handshake
@@ -136,9 +136,9 @@ while :; do
     age=$((now - hs_epoch))
     (( age < 0 )) && age=0  # clock wound backward
   fi
-  # If the interface is gone, treat it as dead
-  if [ -z "$interface" ] || ! ip link show "$interface" 2>/dev/null; then
-    age=999999
+  # If the tunnel interface is gone, treat it as dead
+  if ! ip link show wg0 2>/dev/null; then
+    age=999999              # interface gone
   fi
 
   if [[ ${age} =~ ^[0-9]+$ ]] && (( age > dead_seconds )); then
@@ -147,6 +147,10 @@ while :; do
       echo "[$(date -Iseconds)] ERROR: tunnel dead (last handshake ${age}s ago). Flushing conntrack (fail-closed) and re-establishing."
       conntrack -F 2>/dev/null || echo "[$(date -Iseconds)] WARNING: conntrack flush failed (missing conntrack or NET_ADMIN)."
       last_resurrect=$now_ts
+      # Re-establish. wg-quick up fails if the interface already exists (the
+      # common case: peer dead but wg0 still present), so tear it down first,
+      # ignoring errors when the interface is already gone, then bring it up.
+      wg-quick down wg0 2>/dev/null || true
       wg-quick up wg0 || echo "[$(date -Iseconds)] WARNING: re-establishment failed. Will keep supervising."
     fi
   fi
