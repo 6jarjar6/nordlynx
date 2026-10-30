@@ -1,7 +1,7 @@
 FROM ghcr.io/linuxserver/baseimage-alpine:3.24@sha256:52106d187a66ccb92e3289cb6dd25c549cb0b6b7bfec38a51994434c96db2d35
 LABEL maintainer="6jarjar6"
 
-# Healthy iff the oldest peer handshake is at most 120s old.
+# Healthy if the oldest peer handshake is at most 120s old.
 # wg reports latest-handshakes as a human-readable duration ("1 hour ago",
 # "never"), not an epoch, so the duration is converted to seconds (age).
 # "never" and an empty result (wg0 missing) both fail the check, as they should.
