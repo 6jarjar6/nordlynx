@@ -5,14 +5,14 @@ title: ''
 labels: bug, help wanted
 assignees: ''
 ---
-##### :warning: Make sure to follow the template, troubleshoot on your own first, review [Open/Closed Issues](https://github.com/bubuntux/nordlynx/issues), [Discussions](https://github.com/bubuntux/nordlynx/discussions), [Wiki](https://github.com/bubuntux/nordlynx/wiki) and consider creating a discussion thread instead. :warning:
+##### :warning: Make sure to follow the template, troubleshoot on your own first, review [Open/Closed Issues](https://github.com/6jarjar6/nordlynx/issues), [Discussions](https://github.com/6jarjar6/nordlynx/discussions) and consider creating a discussion thread instead. :warning:
 
 ### **Describe the bug**
 A clear and concise description of what the bug is.
 
 ### **To Reproduce using docker CLI**
 Full command needs to be provided (hide credentials)
-`docker run ... bubuntux/nordlynx `
+`docker run ... 6jarjar6/nordlynx `
 
 ### **To Reproduce using docker-compose**
 docker-compose.yml if used  (hide credentials)
@@ -20,7 +20,7 @@ docker-compose.yml if used  (hide credentials)
 version: '3'
 services:
   vpn:
-    image: bubuntux/nordlynx
+    image: 6jarjar6/nordlynx
   ...
 ```
 
