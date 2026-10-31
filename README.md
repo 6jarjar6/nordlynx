@@ -9,7 +9,7 @@
 
 ## Quick reference
 
-- **Forked from**: [Julio Gutierrez](https://github.com/bubuntux)
+- **Originally developed by**: [Julio Gutierrez](https://github.com/bubuntux)
 - **Maintained by**: [6jarjar6](https://github.com/6jarjar6)
 - **Where to get help**: [Github discussions](https://github.com/6jarjar6/nordlynx/discussions)
 
@@ -122,9 +122,9 @@ Wireguard module is required, please install it [manually](https://www.wireguard
 | `ADDRESS` | Default: 10.5.0.2/32. A comma-separated list of IP (v4 or v6) addresses (optionally with CIDR masks) to be assigned to the interface. |
 | `DNS` | Default: [103.86.96.100<br/>103.86.99.100](https://support.nordvpn.com/General-info/1047409702/What-are-your-DNS-server-addresses.htm). A comma-separated list of IP (v4 or v6) addresses to be set as the interface's DNS servers, or non-IP hostnames to be set as the interface's DNS search domains. |
 | `TABLE` | Default: _(none)_. Controls the routing table to which routes are added. There are two special values: `off` disables the creation of routes altogether, and `auto` (suggested for most users) adds routes to the default table and enables special handling of default routes. |
-| `ALLOWED_IPS` | Default: 0.0.0.0/0. A comma-separated list of IP (v4 or v6) addresses with CIDR masks from which incoming traffic for this peer is allowed and to which outgoing traffic for this peer is directed. For Synology, read [this](https://github.com/bubuntux/nordlynx/wiki/Synology). |
+| `ALLOWED_IPS` | Default: 0.0.0.0/0. A comma-separated list of IP (v4 or v6) addresses with CIDR masks from which incoming traffic for this peer is allowed and to which outgoing traffic for this peer is directed. For Synology, read [docs/Synology.md](docs/Synology.md). |
 | `PERSISTENT_KEEP_ALIVE` | Default: 25. A second interval, between 1 and 65535 inclusive, of how often to send an authenticated empty packet to the peer for the purpose of keeping a stateful firewall or NAT mapping valid persistently. |
-| `PRE_UP` / `POST_UP` / `PRE_DOWN` / `POST_DOWN` | Default: _(none)_. Script snippets which will be executed by bash before/after setting up/tearing down the interface, most commonly used to configure custom DNS options or firewall rules. The special string `%i` is expanded to INTERFACE. For Synology, read [this](https://github.com/bubuntux/nordlynx/wiki/Synology). |
+| `PRE_UP` / `POST_UP` / `PRE_DOWN` / `POST_DOWN` | Default: _(none)_. Script snippets which will be executed by bash before/after setting up/tearing down the interface, most commonly used to configure custom DNS options or firewall rules. The special string `%i` is expanded to INTERFACE. For Synology, read [docs/Synology.md](docs/Synology.md). |
 | `QUERY` | Default: _(none)_. Raw query string appended to the recommendation API URL. Note: the endpoint only honors `limit`/`offset`; other filters (country, group, technology) are ignored. |
 | `LIMIT` | Default: 1. Number of servers to request from the recommendations API (the only knob besides `OFFSET` it honors). |
 | `OFFSET` | Default: 0. Index into the recommendations API list to select from (shifts the list server-side). |
