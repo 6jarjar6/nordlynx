@@ -143,32 +143,12 @@ while :; do
     continue
   fi
 
-  # wg emits the latest handshake as a human-readable duration such as
-  # "1 hour ago" (or "never") — NOT an epoch. Convert that duration straight
-  # to seconds (= seconds since the last handshake = the age). Robust to
-  # "1 hour 30 minutes ago", "2 days ago", "never", empty, and multi-peer
-  # table output (we take the most-stale peer, the conservative choice).
-  age=$(wg show wg0 latest-handshakes 2>/dev/null | awk '
-    NF == 0 { next }
-    {
-      u["second"]=1; u["sec"]=1; u["seconds"]=1; u["minute"]=60; u["min"]=60; u["minutes"]=60; u["mins"]=60; u["hour"]=3600; u["hours"]=3600;
-      u["day"]=86400; u["days"]=86400; u["week"]=604800; u["weeks"]=604800; u["month"]=2592000; u["months"]=2592000; u["year"]=31536000; u["years"]=31536000;
-      total=0; num="";
-      for(i=1;i<=NF;i++){
-        if($i=="never"){ total=999999999 }
-        else if($i~/^[0-9]+$/){ num=$i }
-        else if(($i in u) && num!=""){ total+=num*u[$i]; num="" }
-      }
-      print total
-    }' | sort -rn | head -1)
-  if [ -z "$age" ] || [ "$age" -lt 1 ]; then
-    age=999999              # never handshake / empty
-  fi
-  (( age < 0 )) && age=0    # safety clamp
-  # If the tunnel interface is gone, treat it as dead
-  if ! ip link show wg0 2>/dev/null; then
-    age=999999              # interface gone
-  fi
+  # Latest-handshake age (seconds) via the shared helper (/etc/lib/wg_age.sh).
+  # The helper converts wg's human-readable duration ("1 hour ago" / "never")
+  # to the age and takes the most-stale peer; it prints NOTHING on failure
+  # (interface gone, no peers, no output), which we treat as dead.
+  age=$(bash /etc/lib/wg_age.sh)
+  [ -z "${age}" ] && age=999999   # interface gone / no peers / never handed shake: dead
 
   if [[ ${age} =~ ^[0-9]+$ ]] && (( age > dead_seconds )); then
     now_ts=$(date +%s)
