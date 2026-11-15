@@ -4,7 +4,6 @@
   "forkProcessing": "enabled",
   "automerge": true,
   "separateMajorMinor": true,
-  "semanticCommits": true,
   "stabilityDays": 7,
   "ignoreUnstable": true,
   "vulnerabilityAlerts": {
@@ -14,13 +13,13 @@
   "packageRules": [
     {
       "description": "Runtime-critical: can change handshake output format. Require manual review.",
-      "matchManagers": ["apk"],
+      "matchManagers": ["dockerfile"],
       "matchPackageNames": ["wireguard-tools"],
       "automerge": false
     },
     {
       "description": "Runtime-critical base image: can shift behavior, kernel, or tool versions. Require manual review.",
-      "matchManagers": ["docker"],
+      "matchManagers": ["dockerfile"],
       "matchPackageNames": ["ghcr.io/linuxserver/baseimage-alpine"],
       "automerge": false
     }
