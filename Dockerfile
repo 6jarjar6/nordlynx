@@ -16,7 +16,7 @@ RUN apk add --no-cache -U bash
 SHELL ["/bin/bash", "-c"]
 
 RUN chmod +x /etc/cont-init.d/* /etc/lib/wg_age.sh /etc/services.d/wireguard/* && \
-    apk add --no-cache -U wireguard-tools curl jq iptables ip6tables conntrack-tools && \
     apk upgrade && \
+    apk add --no-cache wireguard-tools=1.0.20260223-r0 curl jq iptables ip6tables conntrack-tools && \
     sed -i '/cmd sysctl -q net.ipv4.conf.all.src_valid_mark=1/s/^\(\t\)/\1# /' /usr/bin/wg-quick && \
     rm -rf /tmp/*
