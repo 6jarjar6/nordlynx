@@ -1,8 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices"
-  ],
+  "extends": ["config:best-practices"],
   "forkProcessing": "enabled",
-  "automerge": true
+  "automerge": true,
+  "separateMajorMinor": true,
+  "semanticCommits": true,
+  "packageRules": [
+    {
+      "description": "Runtime-critical: can change handshake output format. Require manual review.",
+      "matchManagers": ["apk"],
+      "matchPackageNames": ["wireguard-tools"],
+      "automerge": false
+    },
+    {
+      "description": "Runtime-critical base image: can shift behavior, kernel, or tool versions. Require manual review.",
+      "matchManagers": ["docker"],
+      "matchPackageNames": ["ghcr.io/linuxserver/baseimage-alpine"],
+      "automerge": false
+    }
+  ]
 }
