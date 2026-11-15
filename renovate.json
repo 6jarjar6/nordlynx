@@ -5,6 +5,12 @@
   "automerge": true,
   "separateMajorMinor": true,
   "semanticCommits": true,
+  "stabilityDays": 7,
+  "ignoreUnstable": true,
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "schedule": "at any time"
+  },
   "packageRules": [
     {
       "description": "Runtime-critical: can change handshake output format. Require manual review.",
